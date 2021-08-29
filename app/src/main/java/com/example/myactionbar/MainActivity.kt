@@ -22,6 +22,7 @@ class MainActivity : AppCompatActivity() {
         inflater.inflate(R.menu.option_menu, menu) // menampilkan custom item pada action bar
 
         val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        //Untuk mengambil komponen searchview yang sebelumnya sudah di inflate
         val searchView = menu.findItem(R.id.search).actionView as SearchView
 
         searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
