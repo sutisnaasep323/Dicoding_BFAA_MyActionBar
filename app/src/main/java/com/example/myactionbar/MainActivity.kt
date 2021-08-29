@@ -1,10 +1,15 @@
 package com.example.myactionbar
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
+import androidx.appcompat.widget.SearchView
+import android.widget.Toast
+import java.util.*
 
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -12,9 +17,32 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
         val inflater = menuInflater
         inflater.inflate(R.menu.option_menu, menu) // menampilkan custom item pada action bar
+
+        val searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        val searchView = menu.findItem(R.id.search).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        // untuk memberikan hint pada user tentang query search apa yang telah dimasukkan. Hal ini akan memudahkan pengguna untuk memasukkan suatu kata
+        searchView.queryHint = resources.getString(R.string.search_hint)
+        searchView.setOnQueryTextListener(object: SearchView.OnQueryTextListener {
+            /*
+            Gunakan method ini ketika search selesai atau OK. ketika disearch akan tampil toast
+             */
+            override fun onQueryTextSubmit(query: String): Boolean {
+                Toast.makeText(this@MainActivity, query, Toast.LENGTH_SHORT).show()
+                return true
+            }
+
+            /*
+            Gunakan method ini untuk merespon tiap perubahan huruf pada searchView. akan dipanggil setiap kali user memasukkan atau mengubah query yang ada pada inputan searchview
+             */
+            override fun onQueryTextChange(newText: String): Boolean {
+                return false
+            }
+        })
         return true
     }
 
